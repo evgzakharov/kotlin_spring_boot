@@ -24,8 +24,6 @@ repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/snapshot" }
     maven { url "http://repo.spring.io/milestone" }
-
-    maven { url "http://10.10.10.67:8081/nexus/content/groups/public" }
 }
 
 dependencies {
