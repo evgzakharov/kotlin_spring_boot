@@ -1,36 +1,46 @@
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-4584'
+    ext.kotlinVersion = '1.3.21'
+    ext.springBootVersion = '2.1.2.RELEASE'
     repositories {
-        mavenCentral()
-        maven { url "http://repo.spring.io/snapshot" }
-        maven { url "http://repo.spring.io/milestone" }
+        jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'kotlin'
 
 jar {
     baseName = 'test-spring-kotlin-project'
-    version = '0.1.0'
+    version = '1.0.0'
 }
 
 repositories {
-    mavenCentral()
-    maven { url "http://repo.spring.io/snapshot" }
-    maven { url "http://repo.spring.io/milestone" }
+    jcenter()
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict", "-progressive"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict",  "-progressive"]
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:1.3.0.RELEASE")
-    compile("org.springframework:spring-jdbc:4.2.3.RELEASE")
-    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.6.4")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework:spring-jdbc")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 }
 
