@@ -1,34 +1,41 @@
 package test.kotlin.spring.project
 
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
-data class AckResponse(val status: Boolean, val result: String, val message: String? = null)
+interface Response {
+    val status: Boolean
+}
+
+data class MessageResponse(
+    val result: String,
+    val message: String? = null,
+    override val status: Boolean = true
+) : Response
+
+data class ValuesResponse(
+    val values: List<Long>,
+    override val status: Boolean = true
+) : Response
 
 @RestController
-open class ServiceController {
-    @GetMapping("/request")
-    open fun nameRequest(
+class ServiceController {
+    @GetMapping("/hello")
+    fun hello(
         @RequestParam(value = "name") name: String,
         @RequestParam(value = "surname", required = false) surname: String?
-    ): AckResponse {
+    ): Response {
         return if (surname == null)
-            AckResponse(status = true, result = "Hi $name", message = "surname is empty")
+            MessageResponse(result = "Hi $name", message = "surname is empty")
         else
-            AckResponse(status = true, result = "Hi $surname,$name")
+            MessageResponse(result = "Hi $surname,$name")
     }
 
-    @GetMapping("/sort_request")
-    open fun findMinimum(@RequestParam(value = "values") values: Array<String>): AckResponse {
+    @GetMapping("/sort")
+    fun sort(@RequestParam(value = "values") values: List<Long>): Response {
         println("values:")
-        values.forEach { println(it) }
 
-        val minValue = values.apply { sortBy { it.length } }
-            .firstOrNull()
-            ?.split("_")
-            ?.sorted()
-            ?.joinToString(",") ?: ""
-
-        return AckResponse(status = true, result = minValue)
+        return ValuesResponse(values = values.sorted())
     }
 }

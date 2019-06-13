@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlinVersion = '1.3.21'
+    ext.kotlinVersion = '1.3.31'
     ext.springBootVersion = '2.1.2.RELEASE'
     repositories {
         jcenter()
@@ -7,16 +7,17 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
     }
 }
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
 
 jar {
-    baseName = 'test-spring-kotlin-project'
-    version = '1.0.0'
+    archivesBaseName = 'test-spring-kotlin-project'
 }
 
 repositories {
@@ -38,7 +39,6 @@ compileTestKotlin {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework:spring-jdbc")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
